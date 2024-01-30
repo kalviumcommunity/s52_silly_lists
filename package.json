@@ -1,0 +1,11 @@
+{
+  "name": "s52_silly_lists",
+  "version": "1.0.0",
+  "description": "## Welcome to the \"List of Silly Lists,\" a whimsical web platform where users can contribute, wonder, and laugh with the collection of the most amusing and creative silly lists created by our community. Let's dive into a world of ASAP (as silly as possible) and get started !",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
