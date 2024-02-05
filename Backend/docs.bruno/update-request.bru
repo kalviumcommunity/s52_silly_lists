@@ -1,0 +1,21 @@
+meta {
+  name: update-request
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:3000/update-data/65c120a0f900afd2fc6bd3c9
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "santhosh",
+    "likes": "10k",
+    "images": [
+      "image.png"
+    ]
+  }
+}
