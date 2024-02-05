@@ -1,19 +1,27 @@
 const express = require('express')
 const mongoose = require('mongoose')
 
+const router = require('./router')
+
 require('dotenv').config()
 
 const app = express()
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 
-app.get('/',async (req,res)=>{
+app.use(async (req, res, next) => {
     try{
-        await mongoose.connect(process.env.MONGO_URI)
-        res.status(200).send('<h1>DB Connected</h1>')
+        await mongoose.connect(process.env.MONGO_URI,{
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        })
+        console.log("DB connected")
+        next()
     }catch(error){
-        res.status(400).send('<h1>DB Connection Failed</h1>')
-    }
+        console.log("DB connection failed")
+    } 
 })
+
+app.use(router)
 
 app.listen(PORT,()=>{
     console.log("Server is running on",PORT)
