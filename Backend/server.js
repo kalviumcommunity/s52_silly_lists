@@ -14,7 +14,7 @@ app.use(async (req, res, next) => {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         })
-        console.log("DB connected")
+        console.log("DB connected successfully")
         next()
     }catch(error){
         console.log("DB connection failed")
