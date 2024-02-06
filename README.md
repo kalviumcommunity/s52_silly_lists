@@ -17,4 +17,3 @@ deploy link for endpoint '/ping' (which is created) : https://server-vovq.onrend
 - **Likes** - User can like their insterested list
 - **User Preference** - The most inerested list will be visible on top
 
-
