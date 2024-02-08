@@ -1,23 +1,22 @@
-import React from 'react'
+import React from "react";
+import "./App.css";
+import List from "./components/List";
 
 function App() {
   return (
-    <div>
-      <h1>List Of Silly Lists</h1>
-      <p>Welcome to the "List of Silly Lists," a whimsical web platform where users can contribute, wonder, and laugh with the collection of the most amusing and creative silly lists created by our community. Let's dive into a world of ASAP (as silly as possible) and get started !</p>
-      <h2>Key Features</h2>
-      <ul>
-        <li><b>Creative interface</b> User friendly interface with multiple themes </li>
-        <li><b>User Accounts</b> User can login and access their own individual accounts </li>
-        <li><b>Search and Filter</b>  User can search their interested list</li>
-        <li><b>Share</b>  User can share with their friends </li>
-        <li><b>Different Contents</b> For every user, the list will be vary</li>
-        <li><b>Post Contents</b>User can create and post their creative and silly lists. which will available to anyone</li>
-        <li><b>Likes</b> User can like their insterested list</li>
-        <li><b>User Preference</b> The most inerested list will be visible on top</li>
-      </ul>
+    <div className="min-h-screen w-full flex justify-between md:flex-row xs:flex-col-reverse bg-black lg:pr-4 lg:pl-20">
+      <div className="border-x border-white h-screen xs:w-full md:w-page md:-mr-10 bg-zinc-950 overflow-y-scroll ">
+        <h1 className="text-white font-serif text-4xl text-center m-3">
+          Silly Lists
+        </h1>
+        <List />
+      </div>
+      <div className="flex justify-around items-center h-fit  w-96 lg:mt-6 ">
+        <button className="text-white border-4 border-lime-600 bg-lime-600 font-bold h-12 w-40 rounded">log in</button>
+        <button className="text-white border-4 border-lime-600 font-bold h-12 w-40 rounded">Sign up</button>
+      </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

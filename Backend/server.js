@@ -8,6 +8,8 @@ require('dotenv').config()
 const app = express()
 const PORT = process.env.PORT || 3000
 
+app.use(cors());
+
 app.use(async (req, res, next) => {
     try{
         await mongoose.connect(process.env.MONGO_URI,{
