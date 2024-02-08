@@ -5,15 +5,11 @@ const dataSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  likes: {
-    type: String,
-    required: true,
-  },
-  images: {
+  content: {
     type: Array,
     required: true,
-  },
+  }
 });
 
 
-module.exports = mongoose.model('Data',dataSchema,'Data')
+module.exports = mongoose.model('content',dataSchema,'content')

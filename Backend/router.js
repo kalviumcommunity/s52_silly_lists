@@ -24,8 +24,8 @@ router.post('/create-data',async (req,res)=>{
         return res.status(204).send('No request body found')
     }
     try{
-    const {title,likes,images} = req.body
-      const data = await dataModel.create({title,likes,images})
+    const {title,content} = req.body
+      const data = await dataModel.create({title,content})
       return res.status(200).json(data)
     }catch(error){
     return res.status(400).json(error.message)
@@ -47,8 +47,8 @@ router.put('/update-data/:id',async (req,res)=>{
         return res.status(204).send('No request body found')
     }
     try{
-        const {title,likes,images} = req.body
-      const data = await dataModel.findByIdAndUpdate(req.params.id,{title,likes,images})
+        const {title,content} = req.body
+      const data = await dataModel.findByIdAndUpdate(req.params.id,{title,content})
       res.status(200).json(data)
     }catch(error){
       res.status(400).json(error.message)
