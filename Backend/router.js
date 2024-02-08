@@ -7,7 +7,7 @@ const router = express.Router()
 router.use(express.json());
 
 router.get('/',(req,res)=>{
-    res.send("<h1>Helloooooo!!!</h1>")
+    res.send("<h1>whoohooo Server is running!!!</h1>")
 })
 
 router.get('/get-data',async (req,res)=>{
