@@ -11,9 +11,9 @@ function App() {
         </h1>
         <List />
       </div>
-      <div className="flex justify-around items-center h-fit  w-96 lg:mt-6 ">
-        <button className="text-white border-4 border-lime-600 bg-lime-600 font-bold h-12 w-40 rounded">log in</button>
-        <button className="text-white border-4 border-lime-600 font-bold h-12 w-40 rounded">Sign up</button>
+      <div className="flex md:justify-around xs:justify-end items-center h-fit xs:w-full md:w-96 lg:mt-6 ">
+        <button className="text-white border-4  border-lime-600 bg-lime-600 md:font-bold md:h-12 md:w-40 rounded xs:px-4 xs:m-3">log in</button>
+        <button className="text-white border-4 border-lime-600 md:font-bold md:h-12 md:w-40 rounded  xs:px-4 xs:m-3">Sign up</button>
       </div>
     </div>
   );
