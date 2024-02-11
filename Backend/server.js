@@ -17,6 +17,7 @@ app.use(async (req, res, next) => {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         })
+       
         console.log("DB connected successfully")
         next()
     }catch(error){
@@ -25,6 +26,8 @@ app.use(async (req, res, next) => {
 })
 
 app.use(router)
+
+
 
 app.listen(PORT,()=>{
     console.log("Server is running on",PORT)

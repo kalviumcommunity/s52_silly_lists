@@ -19,6 +19,10 @@ export default {
       'xl': '1280px',
       '2xl': '1536px',
       },
+    fontFamily: {
+        'itim': ['Itim', 'sans-serif'],
+        'serif' : ['ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
+      },
   },
   plugins: [],
 }
