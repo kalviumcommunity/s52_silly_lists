@@ -3,11 +3,9 @@ import {formatDistanceToNow} from 'date-fns';
 import { Link } from 'react-router-dom';
 import {useSelector} from 'react-redux';
 
-
 function List() {
    
   const content = useSelector(state => state.content)
-  // console.log(content)
   return (
     <div className='h-full w-full'>
       <p className='text-white m-4 font-itim'>{content.length} listy lists found...</p>
@@ -21,8 +19,9 @@ function List() {
                 <p className=' font-itim text-gray-100 text-sm'> Creater: Unknown</p>
                 <p className='text-lime-200 text-xs mt-2' >{list.updatedAt ? (formatDistanceToNow(new Date(list.updatedAt),{addSuffix:true})) : "just now" }</p>
                 </div>
-               <div className='bg-zinc-950 rounded-full h-14 w-14 flex justify-center '>
-               <img className='h-10' src={`https://robohash.org/${list_index}`} alt="avatar" />
+               <div className=' rounded-full h-14 w-14 items-center flex justify-center '>
+               {/* <img className='h-12' src={`https://robohash.org/${list_index}`} alt="avatar" /> */}
+               <i className='fa fa-user-circle text-gray-300 text-3xl'></i>
               </div> 
               </div>
               </Link>

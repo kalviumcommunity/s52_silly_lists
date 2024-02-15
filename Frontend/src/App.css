@@ -6,7 +6,7 @@ div{
 }
 
 .manual-blur{
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(10px);
 }
 
 
@@ -16,7 +16,6 @@ div{
 }
 
 
-.manual-color{
-    background-color: #081217;
+.manual-height{
+    height: calc(100vh - 1rem);
 }
-

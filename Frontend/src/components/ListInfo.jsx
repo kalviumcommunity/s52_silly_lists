@@ -6,7 +6,7 @@ import { addContent } from '../Redux/action';
 import BASE_URL from '../config';
 import Loader from './Loader';
 
-function ListInfo() {
+function ListInfo({setAlert}) {
 
   const divRef = useRef(null)
 
@@ -15,6 +15,9 @@ function ListInfo() {
   const dispatch = useDispatch();
 
   const navigate = useNavigate()
+
+
+  const user = useSelector((state)=>state.user)
 
   const [loader,setLoader]=useState(false)
 
@@ -33,12 +36,24 @@ function ListInfo() {
   const handleDelete = () => {
       if(window.confirm('Are you sure to delete this item (irreversible)')){
         setLoader(true)
-        let newArray = content.filter((list,index)=>list._id !== curr_content._id)   
-        dispatch(addContent(newArray))
+        
+        const headers={
+          authorization : localStorage.getItem('token') || ''
+        }
 
-        axios.delete(`${BASE_URL}/delete-data/${curr_content._id}`)
-        .then((res)=>{setLoader(false),navigate('/')})
-        .catch((err)=>console.log(err.message))
+        axios.delete(`${BASE_URL}/delete-data/${curr_content._id}`,{headers})
+        .then((res)=>{
+          const newArray = content.filter((list,index)=>list._id !== curr_content._id)   
+          dispatch(addContent(newArray))
+          setLoader(false)
+          navigate('/')})
+        .catch((err)=>{
+          console.log(err.message)
+          if(err.response.status==403){
+            setAlert('true')
+          }
+          setLoader(false)
+        })
       }
   }
  
@@ -47,7 +62,7 @@ function ListInfo() {
       {
         loader && <Loader />
       }
-      <div ref={divRef} className='h-5/6 w-4/6 rounded-lg bg-neutral-900 text-white relative flex flex-col justify-center items-center bottom-3/4 transition-all duration-200 ease-in'>
+      <div ref={divRef} className='h-5/6 md:w-4/6 xs:w-5/6 rounded-lg bg-neutral-900 text-white relative flex flex-col justify-center items-center bottom-3/4 transition-all duration-200 ease-in-out'>
       <div onClick={handleClose} className='absolute top-1 right-2 text-4xl cursor-pointer'>&times;</div>
         <div >
         <h1 className='font-itim  text-amber-200 text-2xl m-5'>{curr_content.title }</h1>
@@ -65,7 +80,7 @@ function ListInfo() {
           </div>
           <div className='w-4/6 flex justify-around items-center m-5 -mb-10'>
           <Link to='/post-update' state={curr_content}><i className="fa fa-edit  text-2xl cursor-pointer text-lime-400 hover:text-lime-600" ></i></Link>
-          <i onClick={handleDelete} className="fa fa-trash-o text-2xl cursor-pointer text-red-500 hover:text-red-700" ></i>
+          <i onClick={()=>user.isLogin ? handleDelete() : setAlert('true')} className="fa fa-trash-o text-2xl cursor-pointer text-red-500 hover:text-red-700" ></i>
           </div>
       </div>
     </div>

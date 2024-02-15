@@ -7,8 +7,9 @@ export default {
   theme: {
     extend: {
       spacing:{
-        'page':'54rem',
-        '96':'24rem'
+        'page':'66vw',
+        '96':'24rem',
+        'remains':'calc(100vh - 1rem)',
       }
     },
     screens: {
