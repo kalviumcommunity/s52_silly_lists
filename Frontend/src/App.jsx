@@ -3,52 +3,124 @@ import "./App.css";
 import List from "./components/List";
 import Loader from "./components/Loader";
 import axios from 'axios';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { addContent } from "./Redux/action";
-import { Routes,Route,Link,useLocation } from "react-router-dom";
+import { Routes,Route,Link,useLocation, json } from "react-router-dom";
 import ListInfo from "./components/ListInfo";
 import BASE_URL from "./config";
 import Update_Post from "./components/Update_Post";
+import Search from "./components/Search";
+import Signup_Login from "./components/Signup_Login";
+import Alert from "./components/Alert";
+import { setUserName } from "./Redux/action";
+
 
 function App() {
-  const [loader,setLoader]=useState(true)
+
+// const date = new Date;
+// console.log(date.getHours())
 
   const dispatch = useDispatch()
   const location = useLocation()
+
+  const [loader,setLoader]=useState(true)
+  const [alert,setAlert]=useState(false)
+  // const [time,setTime]=useState(false)
+  
+  const user = useSelector((state)=>state.user)
+  // console.log(userName)
 
   useEffect(()=>{
       axios.get(`${BASE_URL}/get-data`)
       .then((res)=>{dispatch(addContent(res.data)), setLoader(false)})
       .catch((err)=>console.error(err.message))
-  },[])
-  
 
+      const userData = JSON.parse(localStorage.getItem('userData'))
+      if(userData){
+        dispatch(setUserName({
+          isLogin:true,
+          userName:userData.userName,
+          profile:userData.profile,
+        }))
+      }
+  },[])
+
+  useEffect(()=>{
+      if(alert){
+        setTimeout(() => {
+          setAlert(false)
+        }, 3000);
+      }
+  },[alert])
+
+  useEffect(()=>{
+    if(user.userName !== ""){
+      const userData = {
+        userName:user.userName,
+        profile:user.profile,
+      }
+      localStorage.setItem('userData',JSON.stringify(userData))
+    }
+  },[user])
+
+  const handleLogout = () => {
+    if(window.confirm('Are you sure to logout')){
+      localStorage.clear()
+      dispatch(setUserName({
+        isLogin:false,
+        userName:"",
+        profile:""
+      }))
+    }
+  }
+  
   return (
-    <div className="min-h-screen w-full flex justify-between md:flex-row xs:flex-col-reverse lg:pr-4 lg:pl-4 bg-zinc-950 overflow">
-      <div className=" flex flex-col items-center text-slate-300 pt-6 ">
+    <div className="min-h-screen w-full flex md:flex-row xs:flex-col-reverse bg-black overflow">
+      <div className=" flex md:flex-col xs:flex-row items-center text-slate-300 bg-gray-900 md:p-3 xs:p-0  xs:m-0 md:m-2 rounded-lg md:justify-start xs:justify-between xs:px-10 sticky z-30 bottom-0" >
       <Link to='/' ><i className={`fa fa-home text-4xl mt-6 cursor-pointer ${location.pathname=='/' ? 'text-green-500' : ""}`}></i></Link>
-      <i className="fa fa-search text-3xl mt-6 cursor-pointer"></i>
-     <Link to='/post-update' ><i className={`fa fa-paper-plane  text-2xl mt-6 cursor-pointer ${location.pathname=='/post-update' ? 'text-green-500' : ""}`}></i>
+      <Link to={'/search'}><i className={`fa fa-search text-3xl mt-6 cursor-pointer ${location.pathname=='/search' && 'text-green-500'}`}></i></Link>
+     <Link to='/post-update' ><i className={`fa fa-paper-plane  text-2xl mt-6 cursor-pointer ${location.pathname=='/post-update' && 'text-green-500'}`}></i>
   </Link> 
       </div>
-      <div className="border-x border-white h-screen xs:w-full md:w-page overflow-y-scroll relative bg-gradient-to-b from-green-950 to-zinc-900">
-        <h1 className="text-white font-serif text-4xl text-center m-3 mb-20">
+      <div className="manual-height xs:w-full md:w-page overflow-y-scroll relative bg-gradient-to-b from-green-950 to-gray-900 xs:my-0 md:my-2 rounded-lg">
+        {
+          alert && <Alert/>
+        }
+        <h1 className="text-white font-serif text-5xl text-center m-3 mb-20">
           listy lists
         </h1>
-       <Link to='/post-update'><i className='fa fa-plus-circle text-white text-3xl absolute top-4 right-4 cursor-pointer'></i></Link> 
+       {/* <Link to='/post-update'><i className='fa fa-plus-circle text-white text-3xl absolute top-4 right-4 cursor-pointer'></i></Link>  */}
         
        <Routes>
           <Route path="/" element={ loader ? <Loader /> : <List/> } />
-          <Route path="/listinfo" element={<ListInfo />} />
-          <Route path="/post-update" element={<Update_Post />} />
+          <Route path="/signup-login" element={<Signup_Login />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/listinfo" element={<ListInfo setAlert={setAlert} />} />
+          <Route path="/post-update" element={<Update_Post setAlert={setAlert} />} />
         </Routes>
         
       </div>
-      <div className="flex md:justify-around xs:justify-end items-center h-fit xs:w-full md:w-96 lg:mt-6 ">
-        <button className="text-white border-4  border-lime-600 bg-lime-600 md:font-bold md:h-10 md:w-32 rounded xs:px-4 xs:m-3">log in</button>
-        <button className="text-white border-4 border-lime-600 md:font-bold md:h-10 md:w-32 rounded  xs:px-4 xs:m-3">Sign up</button>
+      <div className="flex md:justify-around xs:h-fit md:h-remains bg-gray-900 rounded-lg lg:w-fit md:m-2 xs:m-0 flex-grow text-white">
+        {
+          user.isLogin ? (
+            <div className="flex md:flex-col xs:flex-row items-center xs:justify-around xs:w-full md:p-0 xs:p-2 md:h-fit">
+            <h1 className="font-extrabold md:text-3xl xs:text-lg md:m-4 xs:hidden md:block">Good Morning</h1>
+            <div className="flex md:flex-col xs:flex-row items-center ">
+           {
+              user.profile ? <img className="md:h-24 md:w-24 xs:h-8 xs:w-8 rounded-full border border-white" src={user.profile} alt="profile pic" /> : (
+            <div className="font-extrabold text-2xl h-14 w-14 border rounded-full flex justify-center items-center bg-orange-600">{user.userName[0]}</div>
+            )}
+            <h1 className="m-4 font-itim">Hello {user.userName}</h1>
+            </div>
+            <i className="fa fa-sign-out text-2xl cursor-pointer hover:text-red-400 active:text-red-500" onClick={handleLogout}></i>
+            </div>
+          ) : (
+            <div className="flex">
+       <Link to='/signup-login' state='login' ><button className=" border-4  border-lime-600 bg-lime-600 md:font-bold md:h-10 md:w-32 rounded xs:px-4 xs:m-3">log in</button></Link> 
+       <Link to='/signup-login' state='signup' > <button className="border-4 border-lime-600 md:font-bold md:h-10 md:w-32 rounded  xs:px-4 xs:m-3">Sign up</button></Link> 
+       </div>
+       )}
       </div>
-
     </div>
   );
 }

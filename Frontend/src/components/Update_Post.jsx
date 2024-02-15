@@ -8,7 +8,7 @@ import axios from "axios";
 import Loader from "./Loader";
  
 
-function Update_Post() {
+function Update_Post({setAlert}) {
 
   const inputRef = useRef(null)
   const titleFocus = useRef(null)
@@ -25,6 +25,8 @@ const content = location.state || null;
   const [title,setTitle] = useState(content ? content.title : "")
   const [lists,setLists] = useState(content ? content.content : [])
   const [loader,setLoader]=useState(false)
+
+  const user = useSelector((state)=>state.user)
 
 useEffect(()=>{
   setTimeout(()=>divRef.current.style.right='0',0)
@@ -46,35 +48,51 @@ const handleCreate = () => {
 }
 
 const handleSumbit = () => {
-    if(title !== "" && lists.length !== 0){
+    if(title !== "" && lists.length !== 0){ 
       setLoader(true)
+        
+      const headers={
+        authorization : localStorage.getItem('token') || ''
+      }
+
       if(content){
         let updatedList = [...data];
         const index=data.findIndex((list)=>list._id === content._id);
-        console.log(index)
         updatedList[index] = {...updatedList[index],title:title,content:lists};
         dispatch(addContent(updatedList));
 
         axios.put(`${BASE_URL}/update-data/${content._id}`,{
           title:title,
           content:lists
-        })
+        },{headers})
         .then((res)=>setLoader(false),navigate('/'))
-        .catch((err)=>console.log(err.message))
+        .catch((err)=>{
+          console.log(err.message)
+          if(err.response.status==403){
+            setAlert('true')
+          }
+          setLoader(false)
+        })
 
       }else{
         
         axios.post(`${BASE_URL}/create-data`,{
           title:title,
           content:lists
-        })
+        },{headers})
         .then((res)=>{
           const newContent = [...data,res.data]
           dispatch(addContent(newContent))
           setLoader(false);
           navigate('/');
         })
-        .catch((err)=>console.log(err.message))
+        .catch((err)=>{
+          console.log(err.message)
+          if(err.response.status==403){
+            setAlert('true')
+          }
+          setLoader(false)
+        })
       }
     }else{
       alert("Please fill the required fields")
@@ -88,7 +106,7 @@ const handleClose = () => {
 
   return (
     <div className="w-full h-full absolute top-0 flex justify-center items-center manual-blur">
-      <div  ref={divRef} className="h-5/6 w-4/6 rounded-lg bg-neutral-900 text-white relative flex flex-col justify-center items-center right-3/4 transition-all duration-200 ease-in">
+      <div  ref={divRef} className="h-5/6 md:w-4/6 xs:w-5/6 rounded-lg bg-neutral-900 text-white relative flex flex-col justify-center items-center right-3/4 transition-all duration-200 ease-in-out">
         
           <div className="absolute top-1 right-2 text-4xl cursor-pointer" onClick={handleClose}>
             &times;
@@ -108,12 +126,12 @@ const handleClose = () => {
                   )
                 }
         </div>
-        <div className="m-4 border border-white rounded">
-          <input ref={inputRef} className="bg-transparent pl-2" type="text" onKeyUp={(e)=>e.key=='Enter' && handleCreate()} /> 
-          <button className="bg-cyan-600 text-black h-6 w-24" onClick={handleCreate}>ADD LIST</button>
+        <div className="m-4 border border-white rounded flex w-4/6">
+          <input ref={inputRef} className="bg-transparent pl-2 md:w-4/6 xs:w-4/6" type="text" onKeyUp={(e)=>e.key=='Enter' && handleCreate()} /> 
+          <button className="bg-cyan-600 text-black h-6 flex-grow" onClick={handleCreate}>ADD LIST</button>
         </div>
 
-        <button className="text-white bg-lime-600 rounded h-8 w-28 hover:bg-lime-700 absolute right-4 bottom-4" onClick={handleSumbit}>{content ? "UPDATE" : "POST"}</button>
+        <button className="text-white bg-lime-600 rounded h-8 w-28 hover:bg-lime-700 absolute right-4 bottom-4" onClick={()=>user.isLogin ? handleSumbit() : setAlert(true)}>{content ? "UPDATE" : "POST"}</button>
       </div>
       {
         loader && <Loader />
