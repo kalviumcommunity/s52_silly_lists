@@ -111,7 +111,9 @@ const handleGoogleLogin = () => {
     }))
     setUserProfile(res.user.photoURL)
 
-    axios.post(`${BASE_URL}/google-login`)
+    axios.post(`${BASE_URL}/google-login`,{
+      userName:res.user.displayName,
+    })
     .then((res)=>{
       if(res.status = 200){
         localStorage.setItem('token',res.data)
