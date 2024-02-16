@@ -23,8 +23,9 @@ function Signup_Login() {
   const [usernameError,setUSerNameError] = useState('')
   const [passwordError,setPasswordError] = useState('')
   const [loader,setLoader] = useState(false)
-
   const [userProfile,setUserProfile] = useState('')
+
+const borderColor =usernameError ? 'border-red-500' : 'border-gray-400';
 
 const divRef = useRef(null)
 const navigate = useNavigate()
@@ -80,8 +81,9 @@ const onSubmit = (data) => {
       if(res.data == "cannot find your account"){
         setUSerNameError(res.data)
       }else if(res.data =='wrong password'){
+        setUSerNameError("")
         setPasswordError(res.data)
-      }else if(res.data =='login successfull'){
+      }else if(res.status === 200){
         localStorage.setItem('token',res.data)
         const name = username.split('@')[0]
         dispatch(setUserName({
@@ -100,6 +102,7 @@ const onSubmit = (data) => {
 const handleGoogleLogin = () => {
   signInWithPopup(auth,provider)
   .then((res)=>{
+    setLoader(true)
     console.log(res.user)
     dispatch(setUserName({
       isLogin:true,
@@ -112,6 +115,7 @@ const handleGoogleLogin = () => {
     .then((res)=>{
       if(res.status = 200){
         localStorage.setItem('token',res.data)
+        setLoader(false)
       }
     })
     .catch((err)=>console.log(err.message))
@@ -130,7 +134,7 @@ const handleGoogleLogin = () => {
         <form className="w-4/6" onSubmit={handleSubmit(onSubmit)}> 
         <div>
           <label htmlFor="email" className="block">{methodEmail ? 'Email address' : 'Phone Number'}</label>
-          <input type={methodEmail ? 'email' : 'number'} id="email" className="bg-transparent border border-gray-400 h-10 w-full rounded-sm font-sans pl-2" placeholder={methodEmail ? 'example@domain.com' : 'phone no.'} {...register('username',{required:"mail id or phone no. required"})} />
+          <input type={methodEmail ? 'email' : 'number'} id="email" className={`bg-transparent border ${borderColor} h-10 w-full rounded-sm font-sans pl-2`} placeholder={methodEmail ? 'example@domain.com' : 'phone no.'} {...register('username',{required:"mail id or phone no. required"})} />
           <p className="text-red-500 font-itim text-md">{errors.username?.message}</p>
         <p  className="text-red-500 font-itim text-md">{usernameError && usernameError}</p>
         </div>
