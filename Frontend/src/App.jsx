@@ -17,15 +17,12 @@ import { setUserName } from "./Redux/action";
 
 function App() {
 
-// const date = new Date;
-// console.log(date.getHours())
-
   const dispatch = useDispatch()
   const location = useLocation()
 
   const [loader,setLoader]=useState(true)
   const [alert,setAlert]=useState(false)
-  // const [time,setTime]=useState(false)
+  const [greeting,setGreeting]=useState(false)
   
   const user = useSelector((state)=>state.user)
   // console.log(userName)
@@ -43,6 +40,18 @@ function App() {
           profile:userData.profile,
         }))
       }
+
+      const date=new Date;
+      const hour = date.getHours();
+      console.log(hour)
+      if(hour < 12){
+        setGreeting('Good Morning')
+      }else if(hour > 12 && hour < 18){
+        setGreeting('Good Evening')
+      }else{
+        setGreeting("Good Night")
+      }
+      
   },[])
 
   useEffect(()=>{
@@ -104,7 +113,7 @@ function App() {
         {
           user.isLogin ? (
             <div className="flex md:flex-col xs:flex-row items-center xs:justify-around xs:w-full md:p-0 xs:p-2 md:h-fit">
-            <h1 className="font-extrabold md:text-3xl xs:text-lg md:m-4 xs:hidden md:block">Good Morning</h1>
+            <h1 className="font-extrabold md:text-3xl xs:text-lg md:m-4 xs:hidden md:block">{greeting}</h1>
             <div className="flex md:flex-col xs:flex-row items-center ">
            {
               user.profile ? <img className="md:h-24 md:w-24 xs:h-8 xs:w-8 rounded-full border border-white" src={user.profile} alt="profile pic" /> : (
