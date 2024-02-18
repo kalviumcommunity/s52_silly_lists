@@ -8,6 +8,10 @@ const dataSchema = new mongoose.Schema({
   content: {
     type: Array,
     required: true,
+  },
+  creater:{
+    type:String,
+    requires:true
   }
 },{timestamps:true});
 

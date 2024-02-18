@@ -40,12 +40,12 @@ router.post("/create-data", async (req, res) => {
     return res.status(204).send("No request body found");
   }
   try {
-    const { title, content } = req.body;
+    const { title, content, creater } = req.body;
     const token = req.headers.authorization && req.headers.authorization;
     if(!token){return res.status(401).send('authorization failed')}
     const validToken = await verifyToken(token)
     if(!validToken){return res.status(403).send('invalid token')}
-    const data = await dataModel.create({ title, content });
+    const data = await dataModel.create({ title, content,creater });
     return res.status(200).json(data);
   } catch (error) {
     return res.status(400).json(error.message);
@@ -78,8 +78,10 @@ router.put("/update-data/:id", async (req, res) => {
     if(!validToken){return res.status(403).send('invalid token')}
 
     const data = await dataModel.findByIdAndUpdate(req.params.id, {
-      title,
-      content,
+      $set:{
+        title,
+        content
+      }
     });
     res.status(200).json(data);
   } catch (error) {
@@ -150,18 +152,37 @@ router.post("/login", async (req, res) => {
 });
 
 
-router.post('/google-login',(req,res)=>{
-  if (!req.body && !req.body.username) {
-    return res.status(400).send("no request body found");
+router.post('/google-login',async (req,res)=>{
+  if (!req.body || !req.body.username || !req.body.password) {
+    console.log('not found')
+    return res.status(403).send("no request body found");
   }
-  const { username } = req.body;
+  const { username,password } = req.body;
   const token = jwt.sign({ username: username }, process.env.JWT_SECRET, {
     expiresIn: "10m",
   });
-  if(token){
-    return res.status(200).send(token);
-  }else{
-    return res.status(400).send("something went wrong");
+  const data = await userModel.findOne({ username: username });
+  if(!data){
+    try{
+      await userModel.create({
+        username: username,
+        password: password,
+      });
+    }catch(err){
+      console.log(err)
+      return res.status(400).send(err.message);
+    }
+  }
+  return res.status(200).send(token);
+})
+
+
+router.get('/get-users',async (req,res)=>{
+  try{
+    const data = await userModel.find({})
+    res.status(200).send(data)
+  }catch(err){
+    return res.status(400).send(err.message);
   }
 })
 

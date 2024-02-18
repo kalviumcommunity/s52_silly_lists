@@ -6,7 +6,7 @@ const initialState={
         isLogin : false,
         userName : "",
         profile : ""
-    },
+    }
 }
 
 export const reducerFunction = (state=initialState,action) => {

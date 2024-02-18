@@ -21,7 +21,7 @@ function App() {
   const location = useLocation()
 
   const [loader,setLoader]=useState(true)
-  const [alert,setAlert]=useState(false)
+  const [msg,setMsg]=useState(false)
   const [greeting,setGreeting]=useState(false)
   
   const user = useSelector((state)=>state.user)
@@ -43,10 +43,9 @@ function App() {
 
       const date=new Date;
       const hour = date.getHours();
-      console.log(hour)
       if(hour < 12){
         setGreeting('Good Morning')
-      }else if(hour > 12 && hour < 18){
+      }else if(hour >= 12 && hour <= 18){
         setGreeting('Good Evening')
       }else{
         setGreeting("Good Night")
@@ -57,10 +56,10 @@ function App() {
   useEffect(()=>{
       if(alert){
         setTimeout(() => {
-          setAlert(false)
+          setMsg('')
         }, 3000);
       }
-  },[alert])
+  },[msg])
 
   useEffect(()=>{
     if(user.userName !== ""){
@@ -93,7 +92,7 @@ function App() {
       </div>
       <div className="manual-height xs:w-full md:w-page overflow-y-scroll relative bg-gradient-to-b from-green-950 to-gray-900 xs:my-0 md:my-2 rounded-lg">
         {
-          alert && <Alert/>
+          msg && <Alert msg={msg} />
         }
         <h1 className="text-white font-serif text-5xl text-center m-3 mb-20">
           listy lists
@@ -103,11 +102,12 @@ function App() {
        <Routes>
           <Route path="/" element={ loader ? <Loader /> : <List/> } />
           <Route path="/signup-login" element={<Signup_Login />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/listinfo" element={<ListInfo setAlert={setAlert} />} />
-          <Route path="/post-update" element={<Update_Post setAlert={setAlert} />} />
+          <Route path="/search" element={<Search setMsg={setMsg} />} />
+          <Route path="/listinfo" element={<ListInfo setMsg={setMsg} />} />
+          <Route path="/post-update" element={<Update_Post setMsg={setMsg} />} />
         </Routes>
-        
+
+         <p className='text-white text-center p-4 font-itim'>Created & Designed By <a href='https://portfolio-ten-phi-23.vercel.app/' target='_blank' className='text-red-400 font-serif underline'>Santhosh</a></p>
       </div>
       <div className="flex md:justify-around xs:h-fit md:h-remains bg-gray-900 rounded-lg lg:w-fit md:m-2 xs:m-0 flex-grow text-white">
         {
@@ -121,7 +121,7 @@ function App() {
             )}
             <h1 className="m-4 font-itim">Hello {user.userName}</h1>
             </div>
-            <i className="fa fa-sign-out text-2xl cursor-pointer hover:text-red-400 active:text-red-500" onClick={handleLogout}></i>
+            <i className="fas fa-sign-out-alt text-2xl cursor-pointer hover:text-red-400 active:text-red-500" onClick={handleLogout}></i>
             </div>
           ) : (
             <div className="flex">
