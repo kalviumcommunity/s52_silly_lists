@@ -1,20 +1,18 @@
 import React,{useState, useRef, useEffect} from 'react';
-import { useLocation,Link,useNavigate } from 'react-router-dom';
+import { useLocation,Link } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContent } from '../Redux/action';
 import BASE_URL from '../config';
 import Loader from './Loader';
 
-function ListInfo({setAlert}) {
+function ListInfo({setMsg}) {
 
   const divRef = useRef(null)
 
   const location = useLocation()
   const curr_content = location.state;
   const dispatch = useDispatch();
-
-  const navigate = useNavigate()
 
 
   const user = useSelector((state)=>state.user)
@@ -29,9 +27,10 @@ function ListInfo({setAlert}) {
 
   const handleClose = () => {
     divRef.current.style.bottom='-100vh'
-    setTimeout(()=>navigate('/'),200)
+    setTimeout(()=> window.history.back(),200)
   }
 
+  
 
   const handleDelete = () => {
       if(window.confirm('Are you sure to delete this item (irreversible)')){
@@ -46,11 +45,12 @@ function ListInfo({setAlert}) {
           const newArray = content.filter((list,index)=>list._id !== curr_content._id)   
           dispatch(addContent(newArray))
           setLoader(false)
-          navigate('/')})
+          window.history.back()
+         })
         .catch((err)=>{
           console.log(err.message)
           if(err.response.status==403){
-            setAlert('true')
+            setMsg('Session expired, Please logout and login again')
           }
           setLoader(false)
         })
@@ -80,7 +80,7 @@ function ListInfo({setAlert}) {
           </div>
           <div className='w-4/6 flex justify-around items-center m-5 -mb-10'>
           <Link to='/post-update' state={curr_content}><i className="fa fa-edit  text-2xl cursor-pointer text-lime-400 hover:text-lime-600" ></i></Link>
-          <i onClick={()=>user.isLogin ? handleDelete() : setAlert('true')} className="fa fa-trash-o text-2xl cursor-pointer text-red-500 hover:text-red-700" ></i>
+          <i onClick={()=>user.isLogin ? handleDelete() : setMsg('Please login to get the whole access')} className="fa fa-trash text-2xl cursor-pointer text-red-500 hover:text-red-700" ></i>
           </div>
       </div>
     </div>

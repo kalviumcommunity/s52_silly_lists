@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useDispatch,useSelector } from "react-redux";
 import { addContent } from "../Redux/action";
@@ -8,7 +7,7 @@ import axios from "axios";
 import Loader from "./Loader";
  
 
-function Update_Post({setAlert}) {
+function Update_Post({setMsg}) {
 
   const inputRef = useRef(null)
   const titleFocus = useRef(null)
@@ -16,7 +15,6 @@ function Update_Post({setAlert}) {
 
 const location = useLocation()
 const dispatch = useDispatch()
-const navigate = useNavigate()
 
 const data = useSelector(state => state.content)
 
@@ -56,20 +54,23 @@ const handleSumbit = () => {
       }
 
       if(content){
-        let updatedList = [...data];
-        const index=data.findIndex((list)=>list._id === content._id);
-        updatedList[index] = {...updatedList[index],title:title,content:lists};
-        dispatch(addContent(updatedList));
 
         axios.put(`${BASE_URL}/update-data/${content._id}`,{
           title:title,
           content:lists
         },{headers})
-        .then((res)=>setLoader(false),navigate('/'))
+        .then((res)=>{
+          let updatedList = [...data];
+          const index=data.findIndex((list)=>list._id === content._id);
+          updatedList[index] = {...updatedList[index],title:title,content:lists};
+          dispatch(addContent(updatedList));
+          setLoader(false)
+          window.history.back()
+        })
         .catch((err)=>{
           console.log(err.message)
           if(err.response.status==403){
-            setAlert('true')
+            setMsg('Session expired, Please logout and login again')
           }
           setLoader(false)
         })
@@ -78,18 +79,19 @@ const handleSumbit = () => {
         
         axios.post(`${BASE_URL}/create-data`,{
           title:title,
-          content:lists
+          content:lists,
+          creater:user.userName,
         },{headers})
         .then((res)=>{
           const newContent = [...data,res.data]
           dispatch(addContent(newContent))
           setLoader(false);
-          navigate('/');
+        window.history.back()
         })
         .catch((err)=>{
           console.log(err.message)
           if(err.response.status==403){
-            setAlert('true')
+            setMsg('Session expired, Please logout and login again')
           }
           setLoader(false)
         })
@@ -101,7 +103,7 @@ const handleSumbit = () => {
 
 const handleClose = () => {
   divRef.current.style.right='-100vh'
-  setTimeout(()=>navigate('/'),200)
+  setTimeout(()=>window.history.back(),200)
 }
 
   return (
@@ -131,7 +133,7 @@ const handleClose = () => {
           <button className="bg-cyan-600 text-black h-6 flex-grow" onClick={handleCreate}>ADD LIST</button>
         </div>
 
-        <button className="text-white bg-lime-600 rounded h-8 w-28 hover:bg-lime-700 absolute right-4 bottom-4" onClick={()=>user.isLogin ? handleSumbit() : setAlert(true)}>{content ? "UPDATE" : "POST"}</button>
+        <button className="text-white bg-lime-600 rounded h-8 w-28 hover:bg-lime-700 absolute right-4 bottom-4" onClick={()=>user.isLogin ? handleSumbit() : setMsg('Please login to get the whole access')}>{content ? "UPDATE" : "POST"}</button>
       </div>
       {
         loader && <Loader />

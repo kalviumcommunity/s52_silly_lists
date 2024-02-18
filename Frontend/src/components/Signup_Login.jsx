@@ -14,8 +14,7 @@ import BASE_URL from "../config";
 function Signup_Login() {
 
   const location = useLocation() 
-  const dispatch = useDispatch() 
-  
+  const dispatch = useDispatch()
 
 
   const [methodEmail,setMethodEmail] = useState(true)
@@ -23,7 +22,7 @@ function Signup_Login() {
   const [usernameError,setUSerNameError] = useState('')
   const [passwordError,setPasswordError] = useState('')
   const [loader,setLoader] = useState(false)
-  const [userProfile,setUserProfile] = useState('')
+  // const [userProfile,setUserProfile] = useState('')
 
 const borderColor =usernameError ? 'border-red-500' : 'border-gray-400';
 
@@ -100,30 +99,28 @@ const onSubmit = (data) => {
 }
 
 const handleGoogleLogin = () => {
+  setLoader(true)
   signInWithPopup(auth,provider)
-  .then((res)=>{
-    setLoader(true)
-    console.log(res.user)
-    dispatch(setUserName({
+  .then((google_res)=>{
+     dispatch(setUserName({
       isLogin:true,
-      userName:res.user.displayName,
-      profile:res.user.photoURL,
+      userName:google_res.user.displayName,
+      profile:google_res.user.photoURL,
     }))
-    setUserProfile(res.user.photoURL)
-
     axios.post(`${BASE_URL}/google-login`,{
-      userName:res.user.displayName,
+      username:google_res.user.displayName,
+      password:'google-login'
     })
     .then((res)=>{
-      if(res.status = 200){
+      if(res.status === 200){
         localStorage.setItem('token',res.data)
         setLoader(false)
+        navigate('/')
       }
     })
     .catch((err)=>console.log(err.message))
-    navigate('/')
   })
-  .catch((err)=>console.log(err))
+  .catch((google_err)=>console.log(google_err.message))
 }
 
   return (
@@ -136,7 +133,7 @@ const handleGoogleLogin = () => {
         <form className="w-4/6" onSubmit={handleSubmit(onSubmit)}> 
         <div>
           <label htmlFor="email" className="block">{methodEmail ? 'Email address' : 'Phone Number'}</label>
-          <input type={methodEmail ? 'email' : 'number'} id="email" className={`bg-transparent border ${borderColor} h-10 w-full rounded-sm font-sans pl-2`} placeholder={methodEmail ? 'example@domain.com' : 'phone no.'} {...register('username',{required:"mail id or phone no. required"})} />
+          <input type={methodEmail ? 'email' : 'number'} id="email" className={`bg-transparent border ${borderColor} h-10 w-full rounded-sm font-sans pl-2`} placeholder={methodEmail ? 'example@domain.com' : '1234567890'} {...register('username',{required:"mail id or phone no. required"})} />
           <p className="text-red-500 font-itim text-md">{errors.username?.message}</p>
         <p  className="text-red-500 font-itim text-md">{usernameError && usernameError}</p>
         </div>
