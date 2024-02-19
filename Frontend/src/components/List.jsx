@@ -49,6 +49,8 @@ function List(props) {
             )
         })
       }
+
+<p className='text-white text-center p-4 font-itim'>Created & Designed By <a href='https://portfolio-ten-phi-23.vercel.app/' target='_blank' className='text-red-400 font-serif underline'>Santhosh</a></p>
      
     </div>
   )

@@ -106,8 +106,7 @@ function App() {
           <Route path="/listinfo" element={<ListInfo setMsg={setMsg} />} />
           <Route path="/post-update" element={<Update_Post setMsg={setMsg} />} />
         </Routes>
-
-         <p className='text-white text-center p-4 font-itim'>Created & Designed By <a href='https://portfolio-ten-phi-23.vercel.app/' target='_blank' className='text-red-400 font-serif underline'>Santhosh</a></p>
+        
       </div>
       <div className="flex md:justify-around xs:h-fit md:h-remains bg-gray-900 rounded-lg lg:w-fit md:m-2 xs:m-0 flex-grow text-white">
         {
