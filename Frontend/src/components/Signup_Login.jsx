@@ -104,7 +104,7 @@ const handleGoogleLogin = () => {
   .then((google_res)=>{
      dispatch(setUserName({
       isLogin:true,
-      userName:google_res.user.displayName,
+      userName:google_res.user.displayName == "Dhana" ? "Broker" : google_res.user.displayName,
       profile:google_res.user.photoURL,
     }))
     axios.post(`${BASE_URL}/google-login`,{
