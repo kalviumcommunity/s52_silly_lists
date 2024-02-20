@@ -99,12 +99,12 @@ const onSubmit = (data) => {
 }
 
 const handleGoogleLogin = () => {
-  setLoader(true)
   signInWithPopup(auth,provider)
   .then((google_res)=>{
+    setLoader(true)
      dispatch(setUserName({
       isLogin:true,
-      userName:google_res.user.displayName == "Dhana" ? "Broker" : google_res.user.displayName,
+      userName:google_res.user.displayName,
       profile:google_res.user.photoURL,
     }))
     axios.post(`${BASE_URL}/google-login`,{
@@ -118,7 +118,11 @@ const handleGoogleLogin = () => {
         navigate('/')
       }
     })
-    .catch((err)=>console.log(err.message))
+    .catch((err)=>{
+      console.log(err.message)
+      setLoader(false)
+    }
+    )
   })
   .catch((google_err)=>console.log(google_err.message))
 }

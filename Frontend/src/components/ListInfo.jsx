@@ -16,6 +16,8 @@ function ListInfo({setMsg}) {
 
 
   const user = useSelector((state)=>state.user)
+  // console.log(user.userName)
+  // console.log(curr_content.creater)
 
   const [loader,setLoader]=useState(false)
 
@@ -78,10 +80,14 @@ function ListInfo({setMsg}) {
                 })
               }
           </div>
+          {
+            user.userName === curr_content.creater ? (
           <div className='w-4/6 flex justify-around items-center m-5 -mb-10'>
           <Link to='/post-update' state={curr_content}><i className="fa fa-edit  text-2xl cursor-pointer text-lime-400 hover:text-lime-600" ></i></Link>
           <i onClick={()=>user.isLogin ? handleDelete() : setMsg('Please login to get the whole access')} className="fa fa-trash text-2xl cursor-pointer text-red-500 hover:text-red-700" ></i>
           </div>
+          ) : <div className='m-4'>Creator: <span className='text-lime-600 font-itim font-bold'>{curr_content.creater ? curr_content.creater : "Unknown"}</span></div>
+            }
       </div>
     </div>
   )

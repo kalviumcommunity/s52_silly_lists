@@ -25,7 +25,7 @@ function App() {
   const [greeting,setGreeting]=useState(false)
   
   const user = useSelector((state)=>state.user)
-  // console.log(userName)
+  // console.log(user.profile)
 
   useEffect(()=>{
       axios.get(`${BASE_URL}/get-data`)

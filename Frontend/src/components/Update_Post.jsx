@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch,useSelector } from "react-redux";
 import { addContent } from "../Redux/action";
 import BASE_URL from "../config";
@@ -15,6 +15,7 @@ function Update_Post({setMsg}) {
 
 const location = useLocation()
 const dispatch = useDispatch()
+const navigate = useNavigate()
 
 const data = useSelector(state => state.content)
 
@@ -65,7 +66,7 @@ const handleSumbit = () => {
           updatedList[index] = {...updatedList[index],title:title,content:lists};
           dispatch(addContent(updatedList));
           setLoader(false)
-          window.history.back()
+          navigate('/')
         })
         .catch((err)=>{
           console.log(err.message)
