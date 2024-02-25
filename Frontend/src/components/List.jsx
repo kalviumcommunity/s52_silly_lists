@@ -19,13 +19,13 @@ function List(props) {
   
   return (
     <div className='h-full w-full'>
-      <div className='w-full flex justify-between p-4 text-white'>
+      <div className='w-full flex justify-between py-4 px-8 text-white'>
         {
           props.content ? <p><span className='text-red-500 underline'>{props.content[0].creater}</span>  have {props.content.length} posts</p> :
           <p className='font-itim'>{content.length} listy lists found...</p>
         }
         {
-          props.content ? <i onClick={()=>props.back()} className='fa fa-angle-double-left  hover:text-gray-400 text-lg cursor-pointer'> Back</i> :  <i className={`${sort ? 'fas fa-sort-numeric-up' : 'fas fa-sort-numeric-down-alt'} hover:text-gray-300 text-xl`} onClick={handleSort}></i>  
+          props.content ? <i onClick={()=>props.back()} className='fa fa-angle-double-left  hover:text-gray-400 text-lg cursor-pointer'> Back</i> :  <i className={`${sort ? 'fas fa-sort-numeric-up cursor-pointer' : 'fas fa-sort-numeric-down-alt cursor-pointer'} hover:text-gray-300 text-xl`} onClick={handleSort}></i>  
         }
          
       </div>

@@ -22,6 +22,8 @@ export default {
       },
     fontFamily: {
         'itim': ['Itim', 'sans-serif'],
+        'arial': ["Arial", "sans-serif"],
+        'roboto': ['Roboto Condensed', 'sans-serif'],
         'serif' : ['ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
       },
   },

@@ -67,14 +67,14 @@ function ListInfo({setMsg}) {
       <div ref={divRef} className='h-5/6 md:w-4/6 xs:w-5/6 rounded-lg bg-neutral-900 text-white relative flex flex-col justify-center items-center bottom-3/4 transition-all duration-200 ease-in-out'>
       <div onClick={handleClose} className='absolute top-1 right-2 text-4xl cursor-pointer'>&times;</div>
         <div >
-        <h1 className='font-itim  text-amber-200 text-2xl m-5'>{curr_content.title }</h1>
+        <h1 className='font-roboto  text-amber-200 text-2xl m-5'>{curr_content.title }</h1>
         </div>
-          <div className='rounded h-72 w-4/6 manual-shadow flex flex-col overflow-y-scroll'>
+          <div className='rounded h-72 w-4/6 manual-shadow flex flex-col font-roboto overflow-y-scroll'>
               {
                 curr_content.content && curr_content.content.map((list,index)=>{
                   return(
-                    <div key={index} className='font-itim text-lg shadow-xl w-full p-2 m-2'>
-                      <h2>{list}</h2>
+                    <div key={index} className='text-lg shadow-xl w-full p-2 m-2'>
+                      <h2>{index+1}. {list}</h2>
                     </div>
                   )
                 })
@@ -86,7 +86,7 @@ function ListInfo({setMsg}) {
           <Link to='/post-update' state={curr_content}><i className="fa fa-edit  text-2xl cursor-pointer text-lime-400 hover:text-lime-600" ></i></Link>
           <i onClick={()=>user.isLogin ? handleDelete() : setMsg('Please login to get the whole access')} className="fa fa-trash text-2xl cursor-pointer text-red-500 hover:text-red-700" ></i>
           </div>
-          ) : <div className='m-4'>Creator: <span className='text-lime-600 font-itim font-bold'>{curr_content.creater ? curr_content.creater : "Unknown"}</span></div>
+          ) : <div className='m-6 font-itim '>Creator: <span className='text-lime-600 font-bold'>{curr_content.creater ? curr_content.creater : "Unknown"}</span></div>
             }
       </div>
     </div>

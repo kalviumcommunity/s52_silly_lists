@@ -29,8 +29,8 @@ const [curr_content,setCurr_content] = useState("")
   },[])
 
   return (
-    <div className='h-full w-full flex flex-col text-white font-serif'>
-      <p className='m-4'>Verified Users</p>
+    <div className='h-5/6 -mt-6 w-full flex flex-col text-white font-serif overflow-y-scroll'>
+      <p className='m-4'>{users && users.length} Verified Users</p>
       { loader && <Loader /> }
       {
         curr_content ?
@@ -40,10 +40,10 @@ const [curr_content,setCurr_content] = useState("")
           const userName = user.username.split('@')[0]
            const userContent = content.filter((list,index)=>list.creater==userName)
           return(
-            <div key={index} className='w-full p-4 flex justify-between m-1 hover:shadow-lg shadow-md shadow-gray-700'>
+            <div key={index} className='w-full p-4 px-8  flex justify-between hover:shadow-lg shadow-md shadow-gray-700'>
               <div>
-             <h1 onClick={()=>{userContent.length !== 0 ? setCurr_content(userContent) : setMsg("Selected user doesn't have any posts")}} className=' font-serif  text-lime-500 text-2xl hover:underline cursor-pointer w-fit'>{userName}</h1>
-              <p className='md:text-sm  xs:text-xs font-itim mt-2'>Account created : {formatDistanceToNow(new Date(user.updatedAt),{addSuffix:true})}</p>
+             <h1 onClick={()=>{userContent.length !== 0 ? setCurr_content(userContent) : setMsg("Selected user doesn't have any posts")}} className=' font-arial  text-lime-400 text-xl hover:underline cursor-pointer w-fit'>{userName}</h1>
+              <p className='md:text-sm text-gray-400  xs:text-xs font-itim mt-2'>Account created : {formatDistanceToNow(new Date(user.updatedAt),{addSuffix:true})}</p>
               </div>
              <div className='flex flex-col items-center'>
              <h2>Posts</h2>
