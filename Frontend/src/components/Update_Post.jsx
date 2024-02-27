@@ -50,16 +50,16 @@ const handleSumbit = () => {
     if(title !== "" && lists.length !== 0){ 
       setLoader(true)
         
-      const headers={
-        authorization : localStorage.getItem('token') || ''
-      }
+
 
       if(content){
 
         axios.put(`${BASE_URL}/update-data/${content._id}`,{
           title:title,
           content:lists
-        },{headers})
+        },{
+          withCredentials:true
+        })
         .then((res)=>{
           let updatedList = [...data];
           const index=data.findIndex((list)=>list._id === content._id);
@@ -82,7 +82,7 @@ const handleSumbit = () => {
           title:title,
           content:lists,
           creater:user.userName,
-        },{headers})
+        },{withCredentials:true})
         .then((res)=>{
           const newContent = [...data,res.data]
           dispatch(addContent(newContent))

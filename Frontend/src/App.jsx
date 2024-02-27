@@ -72,15 +72,28 @@ function App() {
   },[user])
 
   const handleLogout = () => {
-    if(window.confirm('Are you sure to logout')){
-      localStorage.clear()
-      dispatch(setUserName({
-        isLogin:false,
-        userName:"",
-        profile:""
-      }))
+    if (window.confirm('Are you sure to logout')) {
+      setLoader(true);
+      axios.get(`${BASE_URL}/logout`,{
+        withCredentials:true
+      })
+        .then((res) => {
+          console.log(res.data);
+          localStorage.clear();
+          dispatch(setUserName({
+            isLogin: false,
+            userName: "",
+            profile: ""
+          }));
+          setLoader(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoader(false); 
+        });
     }
-  }
+  };
+  
   
   return (
     <div className="min-h-screen w-full flex md:flex-row xs:flex-col-reverse bg-black overflow">

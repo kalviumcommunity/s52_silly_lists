@@ -53,12 +53,15 @@ const onSubmit = (data) => {
     axios.post(`${BASE_URL}/signup`,{
       username:username,
       password:password,
+    },
+    {
+      withCredentials:true
     })
     .then((res)=>{
       if(res.data == 'username already exists'){
         setUSerNameError('oops, username already taken!')
       }else if(res.status === 200){
-        localStorage.setItem('token',res.data)
+        console.log(res.data)
         setUSerNameError('')
         const name = username.split('@')[0]
         dispatch(setUserName({
@@ -75,6 +78,8 @@ const onSubmit = (data) => {
     axios.post(`${BASE_URL}/login`,{
       username:username,
       password:password,
+    },{
+      withCredentials:true
     })
     .then((res)=>{
       if(res.data == "cannot find your account"){
@@ -83,7 +88,7 @@ const onSubmit = (data) => {
         setUSerNameError("")
         setPasswordError(res.data)
       }else if(res.status === 200){
-        localStorage.setItem('token',res.data)
+        console.log(res.data)
         const name = username.split('@')[0]
         dispatch(setUserName({
           isLogin:true,
@@ -110,6 +115,9 @@ const handleGoogleLogin = () => {
     axios.post(`${BASE_URL}/google-login`,{
       username:google_res.user.displayName,
       password:'google-login'
+    },
+    {
+      withCredentials:true
     })
     .then((res)=>{
       if(res.status === 200){

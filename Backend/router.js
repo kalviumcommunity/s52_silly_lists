@@ -18,7 +18,7 @@ const verifyToken = (token) => {
         resolve(true)
       }
   })
-})
+}) 
 }
 
 
@@ -41,7 +41,7 @@ router.post("/create-data", async (req, res) => {
   }
   try {
     const { title, content, creater } = req.body;
-    const token = req.headers.authorization && req.headers.authorization;
+    const token = req.cookies.token;
     if(!token){return res.status(401).send('authorization failed')}
     const validToken = await verifyToken(token)
     if(!validToken){return res.status(403).send('invalid token')}
@@ -54,7 +54,7 @@ router.post("/create-data", async (req, res) => {
 
 router.delete("/delete-data/:id", async (req, res) => {
   try {
-    const token = req.headers.authorization && req.headers.authorization;
+    const token = req.cookies.token;
     if(!token){return res.status(401).send('authorization failed')}
     const validToken = await verifyToken(token)
     if(!validToken){return res.status(403).send('invalid token')}
@@ -72,7 +72,7 @@ router.put("/update-data/:id", async (req, res) => {
   }
   try {
     const { title, content } = req.body;
-    const token = req.headers.authorization && req.headers.authorization;
+    const token = req.cookies.token;
     if(!token){return res.status(401).send('authorization failed')}
     const validToken = await verifyToken(token)
     if(!validToken){return res.status(403).send('invalid token')}
@@ -117,8 +117,12 @@ router.post("/signup", async (req, res) => {
     const token = jwt.sign({ username: username }, process.env.JWT_SECRET, {
       expiresIn: "10m",
     });
-    // console.log(token);
-    return res.status(200).send(token);
+
+    res.cookie('token',token,{
+      maxAge:1000*3600*48,
+      httpOnly:true,
+    })
+    return res.status(200).send('signup successfully');
   } catch (err) {
     console.log(err);
     return res.status(400).send(err.message);
@@ -141,7 +145,8 @@ router.post("/login", async (req, res) => {
       const token = jwt.sign({ username: username }, process.env.JWT_SECRET, {
         expiresIn: "10m",
       });
-      return res.status(200).send(token);
+    res.cookie('token',token,{maxAge:1000*3600*48,  httpOnly:true,})
+      return res.status(200).send('login successfully');
     } else {
       return res.status(201).send("wrong password");
     }
@@ -173,8 +178,15 @@ router.post('/google-login',async (req,res)=>{
       return res.status(400).send(err.message);
     }
   }
-  return res.status(200).send(token);
+  res.cookie('token',token,{maxAge:1000*3600*48,  httpOnly:true,})
+  return res.status(200).send('login with google');
 })
+
+router.get('/logout', async (req, res) => {
+  console.log('Logging out'); 
+  res.clearCookie('token')
+  return res.status(200).send('Logged out successfully');
+});
 
 
 router.get('/get-users',async (req,res)=>{

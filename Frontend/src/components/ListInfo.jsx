@@ -37,12 +37,8 @@ function ListInfo({setMsg}) {
   const handleDelete = () => {
       if(window.confirm('Are you sure to delete this item (irreversible)')){
         setLoader(true)
-        
-        const headers={
-          authorization : localStorage.getItem('token') || ''
-        }
 
-        axios.delete(`${BASE_URL}/delete-data/${curr_content._id}`,{headers})
+        axios.delete(`${BASE_URL}/delete-data/${curr_content._id}`,{withCredentials:true})
         .then((res)=>{
           const newArray = content.filter((list,index)=>list._id !== curr_content._id)   
           dispatch(addContent(newArray))

@@ -1,7 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors=require('cors')
-
+const cookiParser = require('cookie-parser')
 const router = require('./router')
 
 require('dotenv').config()
@@ -9,7 +9,9 @@ require('dotenv').config()
 const app = express()
 const PORT = process.env.PORT || 3000
 
-app.use(cors());
+app.use(cookiParser())
+
+app.use(cors({ origin: ['http://localhost:5173','https://server-vovq.onrender.com'], credentials: true }));
 
 app.use(async (req, res, next) => {
     try{
