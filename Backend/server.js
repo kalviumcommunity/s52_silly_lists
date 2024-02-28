@@ -11,7 +11,8 @@ const PORT = process.env.PORT || 3000
 
 app.use(cookiParser())
 
-app.use(cors({ origin: ['http://localhost:5173','https://listy-lists.netlify.app/'], credentials: true }));
+app.use(cors())
+app.use(cors({ origin: ['https://listy-lists.netlify.app/','http://localhost:5173'], credentials: true }));
 
 app.use(async (req, res, next) => {
     try{
