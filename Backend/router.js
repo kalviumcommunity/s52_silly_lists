@@ -118,10 +118,12 @@ router.post("/signup", async (req, res) => {
       expiresIn: "10m",
     });
 
-    res.cookie('token',token,{
-      maxAge:1000*3600*48,
-      httpOnly:true,
-    })
+    res.cookie('token', token, {
+      maxAge: 1000 * 3600 * 48,
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true
+    });
     return res.status(200).send('signup successfully');
   } catch (err) {
     console.log(err);
@@ -145,7 +147,12 @@ router.post("/login", async (req, res) => {
       const token = jwt.sign({ username: username }, process.env.JWT_SECRET, {
         expiresIn: "10m",
       });
-    res.cookie('token',token,{maxAge:1000*3600*48,  httpOnly:true,})
+      res.cookie('token', token, {
+        maxAge: 1000 * 3600 * 48,
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true
+      });
       return res.status(200).send('login successfully');
     } else {
       return res.status(201).send("wrong password");
@@ -178,7 +185,12 @@ router.post('/google-login',async (req,res)=>{
       return res.status(400).send(err.message);
     }
   }
-  res.cookie('token',token,{maxAge:1000*3600*48,  httpOnly:true,})
+  res.cookie('token', token, {
+    maxAge: 1000 * 3600 * 48,
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true
+  });
   return res.status(200).send('login with google');
 })
 
