@@ -28,7 +28,9 @@ function App() {
   // console.log(user.profile)
 
   useEffect(()=>{
-      axios.get(`${BASE_URL}/get-data`)
+      axios.get(`${BASE_URL}/get-data`,{
+        withCredentials:true
+      })
       .then((res)=>{dispatch(addContent(res.data)), setLoader(false)})
       .catch((err)=>console.error(err.message))
 
