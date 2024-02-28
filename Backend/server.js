@@ -11,8 +11,22 @@ const PORT = process.env.PORT || 3000
 
 app.use(cookiParser())
 
-app.use(cors())
-app.use(cors({ origin: ['https://listy-lists.netlify.app/','http://localhost:5173'], credentials: true }));
+
+const allowedOrigins = ['https://listy-lists.netlify.app', 'http://localhost:5173'];
+
+app.use(cors({
+  origin: function(origin, callback){
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      let message = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(message), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true
+}));
+
 
 app.use(async (req, res, next) => {
     try{
